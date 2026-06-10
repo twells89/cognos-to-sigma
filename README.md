@@ -71,7 +71,9 @@ flowchart TB
 | Runtime **macros** (`#…# prompt(…,'token',…)`) | `Switch([control])` placeholder | ⚠ flagged |
 | `running-total`, `rank`, `lag/lead`, `GetResourceString` | — (no clean static analog) | ⚠ flagged |
 | **Crosstab → pivot-table** (rows edge → rowsBy, columns edge → columnsBy, measure → values) | pivot-table element | ✅ |
-| Charts (RAVE2), drill-through → actions, Framework Manager `.cpf` | — | ⛔ roadmap |
+| **Charts (RAVE2 `vizControl`)** — clustered/stacked bar & column, line, area, pie, donut, combo, bubble/scatter | bar / line / area / pie / donut / combo / scatter chart | ✅ |
+| Cognos map / network / word-cloud / packed-bubble / treemap (no native Sigma chart) | flagged → table fallback | ⚠ flagged |
+| Drill-through → actions, Framework Manager `.cpf` | — | ⛔ roadmap |
 
 ---
 
