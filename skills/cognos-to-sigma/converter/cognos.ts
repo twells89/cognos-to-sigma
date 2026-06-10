@@ -159,6 +159,7 @@ interface ElemCtx {
   metrics: SigmaMetric[];
   order: string[];
   colIdByName: Map<string, string>;
+  tableTail: string;   // warehouse table name (path tail) — the prefix Sigma resolves col refs against
 }
 
 export function convertCognosIR(model: CognosModule, options: CognosConvertOptions = {}): ConversionResult {
@@ -175,21 +176,23 @@ export function convertCognosIR(model: CognosModule, options: CognosConvertOptio
     const sch = schOverride || qs.schema || '';
     if (db) path.push(db);
     if (sch) path.push(sch);
-    path.push((qs.table || qs.identifier).toUpperCase());
+    const tableTail = (qs.table || qs.identifier).toUpperCase();
+    path.push(tableTail);
     const element: SigmaElement = {
       id: sigmaShortId(), kind: 'table', name: sigmaDisplayName(qs.identifier),
       source: { connectionId, kind: 'warehouse-table', path },
       columns: [], order: [],
     };
-    ctxByKey.set(key, { element, columns: [], metrics: [], order: [], colIdByName: new Map() });
+    ctxByKey.set(key, { element, columns: [], metrics: [], order: [], colIdByName: new Map(), tableTail });
   }
 
-  const ensureRawCol = (ctx: ElemCtx, tableKey: string, ident: string, hidden = false): string => {
+  const ensureRawCol = (ctx: ElemCtx, _tableKey: string, ident: string, hidden = false): string => {
     const disp = sigmaDisplayName(ident);
     const existing = ctx.colIdByName.get(disp);
     if (existing) return existing;
     const id = sigmaShortId();
-    const col: SigmaColumn = { id, formula: `[${sigmaDisplayName(tableKey)}/${disp}]` };
+    // warehouse-table self-ref: prefix is the raw table tail (Sigma fuzzy-matches the column)
+    const col: SigmaColumn = { id, formula: `[${ctx.tableTail}/${disp}]` };
     if (hidden) col.hidden = true;
     ctx.columns.push(col); ctx.order.push(id); ctx.colIdByName.set(disp, id);
     return id;
@@ -228,7 +231,7 @@ export function convertCognosIR(model: CognosModule, options: CognosConvertOptio
         const existing = ctx.colIdByName.get(physDisp);
         if (existing) { if (dispName !== physDisp) { /* alias already mapped */ } continue; }
         const id = sigmaShortId();
-        const col: SigmaColumn = { id, formula: `[${sigmaDisplayName(key)}/${physDisp}]` };
+        const col: SigmaColumn = { id, formula: `[${ctx.tableTail}/${physDisp}]` };
         if (dispName !== physDisp) col.name = dispName;
         ctx.columns.push(col); ctx.order.push(id); ctx.colIdByName.set(physDisp, id);
       }
