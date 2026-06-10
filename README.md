@@ -70,7 +70,8 @@ flowchart TB
 | Detail / summary filters | surfaced as warnings to re-create | ⚠ flagged |
 | Runtime **macros** (`#…# prompt(…,'token',…)`) | `Switch([control])` placeholder | ⚠ flagged |
 | `running-total`, `rank`, `lag/lead`, `GetResourceString` | — (no clean static analog) | ⚠ flagged |
-| Crosstabs → pivots, charts (RAVE2), drill-through | — | ⛔ roadmap |
+| **Crosstab → pivot-table** (rows edge → rowsBy, columns edge → columnsBy, measure → values) | pivot-table element | ✅ |
+| Charts (RAVE2), drill-through → actions, Framework Manager `.cpf` | — | ⛔ roadmap |
 
 ---
 
