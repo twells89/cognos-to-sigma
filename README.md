@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+> **This repository has moved and is no longer maintained here.**
+> The `cognos-to-sigma` skill now lives in the consolidated monorepo:
+> **https://github.com/twells89/sigma-migration-skills** → `plugins/cognos-to-sigma/`
+> This standalone repo is archived (read-only) and kept for reference only.
+
 # Cognos → Sigma
 
 Migrate **IBM Cognos Analytics** to **Sigma**:
